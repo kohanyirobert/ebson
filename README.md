@@ -1,5 +1,5 @@
 # ebson
-`ebson` is an extensible [BSON][] encoder/decoder library written in Java. The
+*ebson* is an extensible [BSON][] encoder/decoder library written in Java. The
 library is extensible in the sense that the mappings between Java and BSON types
 are configurable and the logic to serialize custom Java types is pluggable. Its
 single dependency is the [Guava libraries][] by Google.
