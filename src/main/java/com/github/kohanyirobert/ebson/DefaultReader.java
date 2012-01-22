@@ -108,19 +108,19 @@ enum DefaultReader implements BsonReader {
     }
   },
 
-  UTC_DATE_TIME {
-
-    @Override
-    public Object checkedReadFrom(ByteBuffer buffer) {
-      return new Date(buffer.getLong());
-    }
-  },
-
   BOOLEAN {
 
     @Override
     public Object checkedReadFrom(ByteBuffer buffer) {
       return Boolean.valueOf(buffer.get() == BsonBytes.TRUE);
+    }
+  },
+
+  UTC_DATE_TIME {
+
+    @Override
+    public Object checkedReadFrom(ByteBuffer buffer) {
+      return new Date(buffer.getLong());
     }
   },
 

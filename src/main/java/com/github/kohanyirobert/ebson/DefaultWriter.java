@@ -104,14 +104,6 @@ enum DefaultWriter implements BsonWriter {
     }
   },
 
-  UTC_DATE_TIME {
-
-    @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
-      buffer.putLong(((Date) reference).getTime());
-    }
-  },
-
   BOOLEAN {
 
     @Override
@@ -119,6 +111,14 @@ enum DefaultWriter implements BsonWriter {
       buffer.put(((Boolean) reference).booleanValue()
           ? BsonBytes.TRUE
           : BsonBytes.FALSE);
+    }
+  },
+
+  UTC_DATE_TIME {
+
+    @Override
+    public void writeTo(ByteBuffer buffer, Object reference) {
+      buffer.putLong(((Date) reference).getTime());
     }
   },
 
