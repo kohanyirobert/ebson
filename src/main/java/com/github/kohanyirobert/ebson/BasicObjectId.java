@@ -38,27 +38,27 @@ final class BasicObjectId implements ObjectId {
   }
 
   @Override
-  public ByteBuffer getObjectId() {
+  public ByteBuffer objectId() {
     return objectId.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getTime() {
+  public ByteBuffer time() {
     return time.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getMachineId() {
+  public ByteBuffer machineId() {
     return machineId.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getProcessId() {
+  public ByteBuffer processId() {
     return processId.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getIncrement() {
+  public ByteBuffer increment() {
     return increment.asReadOnlyBuffer();
   }
 
@@ -71,7 +71,7 @@ final class BasicObjectId implements ObjectId {
   public boolean equals(Object object) {
     if (object instanceof ObjectId) {
       ObjectId other = (ObjectId) object;
-      return objectId.equals(other.getObjectId());
+      return objectId.equals(other.objectId());
     }
     return false;
   }

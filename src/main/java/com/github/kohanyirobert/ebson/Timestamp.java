@@ -5,9 +5,9 @@ import java.nio.ByteBuffer;
 // @checkstyle:off .
 public interface Timestamp {
 
-  ByteBuffer getTimestamp();
+  ByteBuffer timestamp();
 
-  ByteBuffer getTime();
+  ByteBuffer time();
 
-  ByteBuffer getIncrement();
+  ByteBuffer increment();
 }

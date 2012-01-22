@@ -5,13 +5,13 @@ import java.nio.ByteBuffer;
 // @checkstyle:off .
 public interface ObjectId {
 
-  ByteBuffer getObjectId();
+  ByteBuffer objectId();
 
-  ByteBuffer getTime();
+  ByteBuffer time();
 
-  ByteBuffer getMachineId();
+  ByteBuffer machineId();
 
-  ByteBuffer getProcessId();
+  ByteBuffer processId();
 
-  ByteBuffer getIncrement();
+  ByteBuffer increment();
 }

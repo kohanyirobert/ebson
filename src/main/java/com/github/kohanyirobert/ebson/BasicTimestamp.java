@@ -31,17 +31,17 @@ final class BasicTimestamp implements Timestamp {
   }
 
   @Override
-  public ByteBuffer getTimestamp() {
+  public ByteBuffer timestamp() {
     return timestamp.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getTime() {
+  public ByteBuffer time() {
     return time.asReadOnlyBuffer();
   }
 
   @Override
-  public ByteBuffer getIncrement() {
+  public ByteBuffer increment() {
     return increment.asReadOnlyBuffer();
   }
 
@@ -54,7 +54,7 @@ final class BasicTimestamp implements Timestamp {
   public boolean equals(Object object) {
     if (object instanceof Timestamp) {
       Timestamp other = (Timestamp) object;
-      return timestamp.equals(other.getTimestamp());
+      return timestamp.equals(other.timestamp());
     }
     return false;
   }
