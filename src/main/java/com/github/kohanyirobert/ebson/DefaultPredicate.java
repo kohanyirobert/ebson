@@ -69,6 +69,16 @@ enum DefaultPredicate implements Predicate<Class<?>> {
     }
   },
 
+  OBJECT_ID {
+
+    @Override
+    public boolean apply(Class<?> input) {
+      return input == null
+          ? false
+          : ObjectId.class.isAssignableFrom(input);
+    }
+  },
+
   BOOLEAN {
 
     @Override
@@ -114,6 +124,16 @@ enum DefaultPredicate implements Predicate<Class<?>> {
       return input == null
           ? false
           : Integer.class.isAssignableFrom(input);
+    }
+  },
+
+  TIMESTAMP {
+
+    @Override
+    public boolean apply(Class<?> input) {
+      return input == null
+          ? false
+          : Timestamp.class.isAssignableFrom(input);
     }
   },
 

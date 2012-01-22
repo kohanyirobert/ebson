@@ -63,7 +63,8 @@ public enum BsonObject {
    * <b>Note:</b> special <a href="http://mongodb.org">MongoDB</a> related type.
    * </p>
    */
-  OBJECT_ID(BsonBytes.OBJECT_ID),
+  OBJECT_ID(BsonBytes.OBJECT_ID, DefaultPredicate.OBJECT_ID,
+      DefaultReader.OBJECT_ID, DefaultWriter.OBJECT_ID),
 
   /**
    * Boolean.
@@ -138,7 +139,8 @@ public enum BsonObject {
    * sharding.
    * </p>
    */
-  TIMESTAMP(BsonBytes.TIMESTAMP),
+  TIMESTAMP(BsonBytes.TIMESTAMP, DefaultPredicate.TIMESTAMP,
+      DefaultReader.TIMESTAMP, DefaultWriter.TIMESTAMP),
 
   /**
    * 64-bit signed integer.

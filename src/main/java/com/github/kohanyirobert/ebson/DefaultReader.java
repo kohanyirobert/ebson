@@ -108,6 +108,14 @@ enum DefaultReader implements BsonReader {
     }
   },
 
+  OBJECT_ID {
+
+    @Override
+    Object checkedReadFrom(ByteBuffer buffer) {
+      return new BasicObjectId(buffer);
+    }
+  },
+
   BOOLEAN {
 
     @Override
@@ -177,6 +185,14 @@ enum DefaultReader implements BsonReader {
     @Override
     public Object checkedReadFrom(ByteBuffer buffer) {
       return Integer.valueOf(buffer.getInt());
+    }
+  },
+
+  TIMESTAMP {
+
+    @Override
+    Object checkedReadFrom(ByteBuffer buffer) {
+      return new BasicTimestamp(buffer);
     }
   },
 
