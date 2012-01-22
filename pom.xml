@@ -8,7 +8,7 @@
   <version>0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Extensible Java BSON encoder/decoder library.</name>
+  <name>ebson</name>
   <description>
     Extensible BSON encoder/decoder library written 
     in Java with pluggable Java-to-BSON type mappings. 
