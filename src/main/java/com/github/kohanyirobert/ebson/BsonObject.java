@@ -25,6 +25,7 @@ public enum BsonObject {
    */
   STRING(BsonBytes.STRING, DefaultPredicate.STRING, DefaultReader.STRING,
       DefaultWriter.STRING),
+
   /**
    * Embedded {@linkplain BsonToken#DOCUMENT document}.
    */
