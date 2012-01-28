@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 
 import javax.xml.bind.DatatypeConverter;
 
-final class BasicTimestamp implements Timestamp {
+final class BasicTimestamp implements BsonTimestamp {
 
   private static final int TIME_LENGTH = 4;
   private static final int INCREMENT_LENGTH = 4;
@@ -52,8 +52,8 @@ final class BasicTimestamp implements Timestamp {
 
   @Override
   public boolean equals(Object object) {
-    if (object instanceof Timestamp) {
-      Timestamp other = (Timestamp) object;
+    if (object instanceof BsonTimestamp) {
+      BsonTimestamp other = (BsonTimestamp) object;
       return timestamp.equals(other.timestamp());
     }
     return false;

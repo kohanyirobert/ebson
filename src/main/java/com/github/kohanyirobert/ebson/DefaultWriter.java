@@ -108,7 +108,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public void writeTo(ByteBuffer buffer, Object reference) {
-      buffer.put(((ObjectId) reference).objectId());
+      buffer.put(((BsonObjectId) reference).objectId());
     }
   },
 
@@ -181,7 +181,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public void writeTo(ByteBuffer buffer, Object reference) {
-      buffer.put(((Timestamp) reference).timestamp());
+      buffer.put(((BsonTimestamp) reference).timestamp());
     }
   },
 

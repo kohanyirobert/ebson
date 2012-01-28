@@ -21,9 +21,8 @@ public final class BsonDocuments {
    * @throws IllegalArgumentException if {@code buffer} is not using
    * little-endian byte ordering
    */
-  @SuppressWarnings("unchecked")
   public static BsonDocument readFrom(ByteBuffer buffer) {
-    return copyOf((Map<String, Object>) BsonToken.DOCUMENT.reader().readFrom(buffer));
+    return (BsonDocument) BsonToken.DOCUMENT.reader().readFrom(buffer);
   }
 
   /**

@@ -3,15 +3,11 @@ package com.github.kohanyirobert.ebson;
 import java.nio.ByteBuffer;
 
 // @checkstyle:off .
-public interface ObjectId {
+public interface BsonTimestamp {
 
-  ByteBuffer objectId();
+  ByteBuffer timestamp();
 
   ByteBuffer time();
-
-  ByteBuffer machineId();
-
-  ByteBuffer processId();
 
   ByteBuffer increment();
 }

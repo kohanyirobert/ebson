@@ -9,7 +9,6 @@ import com.google.common.primitives.Ints;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Date;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
@@ -21,14 +20,15 @@ enum DefaultReader implements BsonReader {
     public Object checkedReadFrom(ByteBuffer buffer) {
       int documentLength = buffer.getInt();
       BsonReader fieldReader = BsonToken.FIELD.reader();
-      Map<Object, Object> document = Maps.newLinkedHashMap();
+      BsonDocument.Builder document = BsonDocuments.builder();
       if (documentLength > Ints.BYTES + 1)
         do {
-          Entry<?, ?> entry = (Entry<?, ?>) fieldReader.readFrom(buffer);
+          @SuppressWarnings("unchecked")
+          Entry<String, Object> entry = (Entry<String, Object>) fieldReader.readFrom(buffer);
           document.put(entry.getKey(), entry.getValue());
         } while (buffer.get(buffer.position()) != BsonBytes.EOO);
       buffer.get();
-      return document;
+      return document.build();
     }
   },
 

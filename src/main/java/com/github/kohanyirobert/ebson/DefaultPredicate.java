@@ -75,7 +75,7 @@ enum DefaultPredicate implements Predicate<Class<?>> {
     public boolean apply(Class<?> input) {
       return input == null
           ? false
-          : ObjectId.class.isAssignableFrom(input);
+          : BsonObjectId.class.isAssignableFrom(input);
     }
   },
 
@@ -133,7 +133,7 @@ enum DefaultPredicate implements Predicate<Class<?>> {
     public boolean apply(Class<?> input) {
       return input == null
           ? false
-          : Timestamp.class.isAssignableFrom(input);
+          : BsonTimestamp.class.isAssignableFrom(input);
     }
   },
 

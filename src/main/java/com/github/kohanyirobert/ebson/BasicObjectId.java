@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 
 import javax.xml.bind.DatatypeConverter;
 
-final class BasicObjectId implements ObjectId {
+final class BasicObjectId implements BsonObjectId {
 
   private static final int TIME_LENGTH = 4;
   private static final int MACHINE_ID_LENGTH = 3;
@@ -69,8 +69,8 @@ final class BasicObjectId implements ObjectId {
 
   @Override
   public boolean equals(Object object) {
-    if (object instanceof ObjectId) {
-      ObjectId other = (ObjectId) object;
+    if (object instanceof BsonObjectId) {
+      BsonObjectId other = (BsonObjectId) object;
       return objectId.equals(other.objectId());
     }
     return false;
