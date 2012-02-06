@@ -46,8 +46,6 @@ public final class BsonDocuments {
    * @return a new document containing {@code map}'s key-value pairs
    * @throws NullPointerException if {@code map} or any of its keys are
    * null
-   * @throws IllegalArgumentException if {@code map} contains keys that are
-   * illegal (starts with {@code '$'} or contains {@code '.'})
    */
   public static BsonDocument copyOf(Map<String, Object> map) {
     return builder().putAll(map).build();
@@ -62,9 +60,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -83,9 +79,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -103,9 +97,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -123,9 +115,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -142,9 +132,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -161,9 +149,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -178,9 +164,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3,
@@ -195,9 +179,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2 etc.</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2, String k3, @Nullable Object v3) {
@@ -211,9 +193,7 @@ public final class BsonDocuments {
    * @return a new document containing the key-value pairs:
    * <em>k1: v1, k2: v2</em>
    * @throws NullPointerException if any key-value pair's key is null
-   * @throws IllegalArgumentException if any key-value pair's key is illegal
-   * (starts with {@code '$'} or contains {@code '.'}) or if there are duplicate
-   * keys
+   * @throws IllegalArgumentException if there are duplicate keys
    */
   public static BsonDocument of(String k1, @Nullable Object v1,
       String k2, @Nullable Object v2) {
@@ -231,8 +211,6 @@ public final class BsonDocuments {
    * @return a new document containing {@code key} and its associated
    * {@code value}
    * @throws NullPointerException if {@code key} is null
-   * @throws IllegalArgumentException if {@code key} is illegal (starts with
-   * {@code '$'} or contains {@code '.'})
    */
   public static BsonDocument of(String key, @Nullable Object value) {
     return builder().put(key, value).build();

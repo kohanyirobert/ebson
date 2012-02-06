@@ -76,9 +76,9 @@ public interface BsonDocument extends Map<String, Object> {
    * @param <T> the expected type of the value associated with {@code key}
    * @return the value associated with {@code key} in a type-safe manner
    * @throws NullPointerException if {@code key} is null
-   * @throws IllegalArgumentException if this document does not contain it or it
-   * is illegal (starts with {@code '$'} or contains {@code '.'}) or if the
-   * value to be returned is not an instance of with {@code type}
+   * @throws IllegalArgumentException if this document does not contain
+   * {@code key} or if the value associated with it is not assignment-compatible
+   * with {@code type}
    * @throws ClassCastException if {@code key} is not a string
    */
   @Nullable
@@ -90,8 +90,8 @@ public interface BsonDocument extends Map<String, Object> {
    * @param key the key whose associated value is to be returned
    * @return the value associated with {@code key}
    * @throws NullPointerException if {@code key} is null
-   * @throws IllegalArgumentException if this document does not contain it or it
-   * is illegal (starts with {@code '$'} or contains {@code '.'})
+   * @throws IllegalArgumentException if this document does not contain
+   * {@code key}
    * @throws ClassCastException if {@code key} is not a string
    */
   @Override
@@ -102,12 +102,10 @@ public interface BsonDocument extends Map<String, Object> {
    * Returns <em>true</em> if {@code key} is contained by this document;
    * <em>false</em> otherwise.
    * 
-   * @param key the key to be tested if it's contained by this document
+   * @param key the key to be tested if it is contained by this document
    * @return <em>true</em> if {@code key} is contained by this document;
    * <em>false</em> otherwise
    * @throws NullPointerException if {@code key} is null
-   * @throws IllegalArgumentException if {@code key} is illegal (starts with
-   * {@code '$'} or contains {@code '.'})
    * @throws ClassCastException if {@code key} is not a string
    */
   @Override
@@ -117,7 +115,7 @@ public interface BsonDocument extends Map<String, Object> {
    * Returns <em>true</em> if {@code value} is contained by this document;
    * <em>false</em> otherwise.
    * 
-   * @param value the value to be tested if it's contained by this document
+   * @param value the value to be tested if it is contained by this document
    * @return <em>true</em> if {@code value} is contained by this document;
    * <em>false</em> otherwise
    */
@@ -222,8 +220,7 @@ public interface BsonDocument extends Map<String, Object> {
      * @param value the value associated with {@code key}
      * @return this builder
      * @throws NullPointerException if {@code key} is null
-     * @throws IllegalArgumentException if {@code key} is illegal (starts with
-     * {@code '$'} or contains {@code '.'}) or if it is already present
+     * @throws IllegalArgumentException if {@code key} is already present
      */
     Builder put(String key, @Nullable Object value);
 
@@ -235,8 +232,7 @@ public interface BsonDocument extends Map<String, Object> {
      * @return this builder
      * @throws NullPointerException if {@code map} or any of its keys are null
      * @throws IllegalArgumentException if {@code map} contains keys that are
-     * illegal (starts with {@code '$'} or contains {@code '.'}) or already
-     * present
+     * already present
      */
     Builder putAll(Map<String, Object> map);
 

@@ -18,9 +18,6 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
   private static final String KEY2 = "key2";
   private static final String KEY3 = "key3";
 
-  private static final String DOLLAR_KEY = "$key";
-  private static final String DOT_KEY = "k.ey";
-
   public BsonDocumentsTest() {}
 
   @Test
@@ -68,24 +65,6 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
     BsonDocuments.copyOf(map);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void copyOf_map_withDollarKey() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put(KEY1, null);
-    map.put(DOLLAR_KEY, null);
-    map.put(KEY3, null);
-    BsonDocuments.copyOf(map);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void copyOf_map_withDotKey() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put(DOT_KEY, null);
-    map.put(KEY2, null);
-    map.put(KEY3, null);
-    BsonDocuments.copyOf(map);
-  }
-
   @Test
   public void of_singleKeyValuePair_withLegalKey() {
     BsonDocument document = BsonDocuments.of(KEY1, null);
@@ -95,16 +74,6 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
   @Test(expected = NullPointerException.class)
   public void of_singleKeyValuePair_withNullKey() {
     BsonDocuments.of(null, null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void of_singleKeyValuePair_withDollarKey() {
-    BsonDocuments.of(DOLLAR_KEY, null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void of_singleKeyValuePair_withDotKey() {
-    BsonDocuments.of(DOT_KEY, null);
   }
 
   @Test
@@ -121,15 +90,5 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
   @Test(expected = IllegalArgumentException.class)
   public void of_multipleKeyValuePairs_withDuplicateKeys() {
     BsonDocuments.of(KEY1, null, KEY1, null, KEY3, null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void of_multipleKeyValuePairs_withDollarKey() {
-    BsonDocuments.of(KEY1, null, KEY2, null, DOLLAR_KEY, null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void of_multipleKeyValuePairs_withDotKey() {
-    BsonDocuments.of(DOT_KEY, null, KEY2, null, KEY3, null);
   }
 }

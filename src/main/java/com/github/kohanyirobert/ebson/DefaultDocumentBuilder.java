@@ -28,8 +28,6 @@ final class DefaultDocumentBuilder implements BsonDocument.Builder {
   @Override
   public BsonDocument.Builder put(String key, @Nullable Object value) {
     Preconditions.checkNotNull(key, "null key");
-    Preconditions.checkArgument(!key.startsWith("$"), "key: '%s' starts with '$'", key);
-    Preconditions.checkArgument(!key.contains("."), "key: '%s' contains '.'", key);
     Preconditions.checkArgument(!builder.containsKey(key), "key: '%s' is already present", key);
     builder.put(key, value);
     return this;

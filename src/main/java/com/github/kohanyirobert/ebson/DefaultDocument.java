@@ -39,9 +39,8 @@ final class DefaultDocument extends ForwardingMap<String, Object> implements Bso
   @Override
   public boolean containsKey(Object key) {
     Preconditions.checkNotNull(key, "null key");
-    BsonPreconditions.checkIsInstance(key, String.class, "key: '%s' is not a string", key);
-    Preconditions.checkArgument(!((String) key).startsWith("$"), "key: '%s' starts with '$'", key);
-    Preconditions.checkArgument(!((String) key).contains("."), "key: '%s' contains '.'", key);
+    if (!String.class.isInstance(key))
+      throw new ClassCastException(String.format("key: '%s' is not a string", key));
     return super.containsKey(key);
   }
 
