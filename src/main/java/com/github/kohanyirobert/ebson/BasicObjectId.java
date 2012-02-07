@@ -24,12 +24,14 @@ final class BasicObjectId implements BsonObjectId {
   private final ByteBuffer objectId = ByteBuffer.allocate(OBJECT_ID_LENGTH).order(ByteOrder.BIG_ENDIAN);
 
   BasicObjectId(ByteBuffer buffer) {
-    int oldLimit = buffer.limit();
+    int oldPosition = buffer.position();
 
+    int oldLimit = buffer.limit();
     buffer.limit(buffer.position() + OBJECT_ID_LENGTH);
     objectId.put(buffer).flip();
+    buffer.limit(oldLimit);
 
-    assert buffer.limit() == oldLimit;
+    assert buffer.position() == oldPosition + OBJECT_ID_LENGTH;
 
     time = ByteBuffer.wrap(objectId.array(), 0, TIME_LENGTH).order(ByteOrder.BIG_ENDIAN);
     machineId = ByteBuffer.wrap(objectId.array(), TIME_LENGTH, MACHINE_ID_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
