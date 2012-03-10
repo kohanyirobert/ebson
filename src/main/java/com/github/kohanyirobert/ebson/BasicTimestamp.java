@@ -19,12 +19,14 @@ final class BasicTimestamp implements BsonTimestamp {
   private final ByteBuffer timestamp = ByteBuffer.allocate(TIMESTAMP_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
 
   BasicTimestamp(ByteBuffer buffer) {
-    int oldLimit = buffer.limit();
+    int oldPosition = buffer.position();
 
+    int oldLimit = buffer.limit();
     buffer.limit(buffer.position() + TIMESTAMP_LENGTH);
     timestamp.put(buffer).flip();
+    buffer.limit(oldLimit);
 
-    assert buffer.limit() == oldLimit;
+    assert buffer.position() == oldPosition + TIMESTAMP_LENGTH;
 
     time = ByteBuffer.wrap(timestamp.array(), 0, TIME_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
     increment = ByteBuffer.wrap(timestamp.array(), INCREMENT_LENGTH, TIME_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
