@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("static-method")
@@ -42,10 +41,11 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
 
   @Test
   public void copyOf_map_withLegalKeys() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put(KEY1, null);
-    map.put(KEY2, null);
-    map.put(KEY3, null);
+    Map<String, Object> map = BsonDocuments.builder()
+        .put(KEY1, null)
+        .put(KEY2, null)
+        .put(KEY3, null)
+        .build();
     BsonDocument document = BsonDocuments.copyOf(map);
     assertArrayEquals(map.keySet().toArray(), document.keySet().toArray());
     assertArrayEquals(map.values().toArray(), document.values().toArray());
@@ -58,11 +58,11 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
 
   @Test(expected = NullPointerException.class)
   public void copyOf_map_withNullKey() {
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put(KEY1, null);
-    map.put(KEY2, null);
-    map.put(null, null);
-    BsonDocuments.copyOf(map);
+    BsonDocuments.copyOf(BsonDocuments.builder()
+        .put(KEY1, null)
+        .put(KEY2, null)
+        .put(null, null)
+        .build());
   }
 
   @Test

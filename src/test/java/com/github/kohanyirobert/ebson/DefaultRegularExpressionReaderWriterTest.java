@@ -12,6 +12,7 @@ import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.LITERAL;
 import static java.util.regex.Pattern.MULTILINE;
 import static java.util.regex.Pattern.UNICODE_CASE;
+import static java.util.regex.Pattern.UNICODE_CHARACTER_CLASS;
 import static java.util.regex.Pattern.UNIX_LINES;
 import static java.util.regex.Pattern.compile;
 
@@ -71,13 +72,11 @@ public final class DefaultRegularExpressionReaderWriterTest extends AbstractRead
     assertPatternEquals(writeTo(compile("", UNICODE_CASE)), readFrom());
   }
 
-  // @formatter:off
-  // @Ignore("the 'UNICODE_CHARACTER_CLASS' flag isn't supported")
-  // @Test
-  // public void unicodeCharacterClassFlag() {
-  //  assertPatternEquals(writeTo(compile("", UNICODE_CHARACTER_CLASS)), readFrom());
-  // }
-  // @formatter:on
+  @Ignore("the 'UNICODE_CHARACTER_CLASS' flag isn't supported")
+  @Test
+  public void unicodeCharacterClassFlag() {
+    assertPatternEquals(writeTo(compile("", UNICODE_CHARACTER_CLASS)), readFrom());
+  }
 
   @Ignore("the 'UNIX_LINES' flag isn't supported")
   @Test
