@@ -5,7 +5,7 @@
 
   <groupId>com.github.kohanyirobert</groupId>
   <artifactId>ebson</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>jar</packaging>
 
   <name>ebson</name>
