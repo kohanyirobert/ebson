@@ -28,7 +28,7 @@ installation's *settings.xml* or your project's *pom.xml*.
 
 ```xml
 <repository>
-  <id>sonatype-oss<id>
+  <id>sonatype-oss</id>
   <url>https://oss.sonatype.org/content/groups/public</url>
 </repository>
 ```
