@@ -180,6 +180,14 @@ enum DefaultReader implements BsonReader {
     }
   },
 
+  SYMBOL {
+
+    @Override
+    Object checkedReadFrom(ByteBuffer buffer) {
+      return new BasicSymbol(buffer);
+    }
+  },
+
   INT32 {
 
     @Override

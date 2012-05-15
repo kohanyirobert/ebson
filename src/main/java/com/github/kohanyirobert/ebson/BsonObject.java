@@ -118,7 +118,8 @@ public enum BsonObject {
    * type.
    * </p>
    */
-  SYMBOL(BsonBytes.SYMBOL),
+  SYMBOL(BsonBytes.SYMBOL, DefaultPredicate.SYMBOL,
+      DefaultReader.SYMBOL, DefaultWriter.SYMBOL),
 
   /**
    * JavaScript code with scope.

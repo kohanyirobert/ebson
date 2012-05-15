@@ -169,6 +169,15 @@ enum DefaultWriter implements BsonWriter {
     }
   },
 
+  SYMBOL {
+
+    @Override
+    public void writeTo(ByteBuffer buffer, Object reference) {
+      ByteBuffer symbol = ((BsonSymbol) reference).symbol();
+      buffer.putInt(symbol.capacity() + 1).put(symbol).put(BsonBytes.EOO);
+    }
+  },
+
   INT32 {
 
     @Override

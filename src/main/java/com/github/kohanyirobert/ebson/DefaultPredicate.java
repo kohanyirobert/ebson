@@ -117,6 +117,16 @@ enum DefaultPredicate implements Predicate<Class<?>> {
     }
   },
 
+  SYMBOL {
+
+    @Override
+    public boolean apply(Class<?> input) {
+      return input == null
+          ? false
+          : BsonSymbol.class.isAssignableFrom(input);
+    }
+  },
+
   INT32 {
 
     @Override
