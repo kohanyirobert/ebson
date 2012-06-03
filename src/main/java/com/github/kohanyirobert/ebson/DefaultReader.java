@@ -157,7 +157,7 @@ enum DefaultReader implements BsonReader {
       return flags;
     }
 
-    // @do-not-check CyclomaticComplexity
+    // @do-not-check-next-line CyclomaticComplexity
     private int optionToFlag(char option) {
       int flag = 0;
       switch (option) {

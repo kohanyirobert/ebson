@@ -146,7 +146,7 @@ enum DefaultWriter implements BsonWriter {
       keyWriter.writeTo(buffer, flagsToOptions(regularExpression.flags()));
     }
 
-    // @do-not-check CyclomaticComplexity
+    // @do-not-check-next-line CyclomaticComplexity
     private String flagsToOptions(int flags) {
       SortedSet<Character> options = Sets.newTreeSet();
       if (hasFlag(flags, Pattern.CASE_INSENSITIVE))

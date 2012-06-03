@@ -39,7 +39,7 @@ public final class DefaultArrayReaderWriterTest extends AbstractReaderWriterTest
     assertArrayEquals(toArray(expected), toArray(actual));
   }
 
-  // @do-not-check CyclomaticComplexity
+  // @do-not-check-next-line CyclomaticComplexity
   private static Object[] toArray(Object object) {
     Object[] array;
     if (object instanceof Object[])
