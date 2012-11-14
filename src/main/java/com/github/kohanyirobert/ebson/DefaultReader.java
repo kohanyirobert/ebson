@@ -94,7 +94,7 @@ enum DefaultReader implements BsonReader {
       BsonBinary bsonBinary = BsonBinary.find(terminal);
       int oldLimit = buffer.limit();
       buffer.limit(buffer.position() + binaryLength);
-      byte[] binary = (byte[]) bsonBinary.reader().readFrom(buffer);
+      Object binary = bsonBinary.reader().readFrom(buffer);
       buffer.limit(oldLimit);
       return binary;
     }

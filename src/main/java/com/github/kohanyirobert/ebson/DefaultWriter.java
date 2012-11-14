@@ -90,11 +90,12 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public void writeTo(ByteBuffer buffer, Object reference) {
-      byte[] binary = (byte[]) reference;
-      buffer.putInt(binary.length);
-      BsonBinary bsonBinary = BsonBinary.find(binary.getClass());
+      int markedPosition = buffer.position();
+      buffer.position(markedPosition + Ints.BYTES);
+      BsonBinary bsonBinary = BsonBinary.find(reference.getClass());
       buffer.put(bsonBinary.terminal());
-      bsonBinary.writer().writeTo(buffer, binary);
+      bsonBinary.writer().writeTo(buffer, reference);
+      buffer.putInt(markedPosition, buffer.position() - markedPosition - Ints.BYTES - 1);
     }
   },
 

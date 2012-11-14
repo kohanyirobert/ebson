@@ -54,8 +54,13 @@ enum DefaultPredicate implements Predicate<Class<?>> {
   BINARY {
 
     @Override
-    public boolean apply(Class<?> input) {
-      return GENERIC.apply(input);
+    public boolean apply(final Class<?> input) {
+      for (BsonBinary binary : BsonBinary.values()) {
+        if (binary.predicate().apply(input)) {
+          return true;
+        }
+      }
+      return false;
     }
   },
 
