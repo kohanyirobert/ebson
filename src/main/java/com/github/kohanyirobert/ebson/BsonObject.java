@@ -271,9 +271,11 @@ public enum BsonObject {
    * was found
    */
   public static BsonObject find(@Nullable Class<?> clazz) {
-    for (BsonObject object : values())
-      if (object.predicate().apply(clazz))
+    for (BsonObject object : values()) {
+      if (object.predicate().apply(clazz)) {
         return object;
+      }
+    }
     throw new IllegalArgumentException(String.format("no object "
         + "representing the '%s' type value was found", clazz));
   }
@@ -287,9 +289,11 @@ public enum BsonObject {
    * was found
    */
   public static BsonObject find(byte terminal) {
-    for (BsonObject object : values())
-      if (object.terminal() - terminal == 0)
+    for (BsonObject object : values()) {
+      if (object.terminal() - terminal == 0) {
         return object;
+      }
+    }
     throw new IllegalArgumentException(String.format("no object representing "
         + "the '%s' terminal value was found", Byte.valueOf(terminal)));
   }

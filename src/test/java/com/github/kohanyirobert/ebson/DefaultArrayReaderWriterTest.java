@@ -42,20 +42,21 @@ public final class DefaultArrayReaderWriterTest extends AbstractReaderWriterTest
   // @do-not-check-next-line CyclomaticComplexity
   private static Object[] toArray(Object object) {
     Object[] array;
-    if (object instanceof Object[])
+    if (object instanceof Object[]) {
       array = (Object[]) object;
 
-    else if (object instanceof Map)
+    } else if (object instanceof Map) {
       array = ((Map<?, ?>) object).values().toArray();
 
-    else if (object instanceof Collection)
+    } else if (object instanceof Collection) {
       array = ((Collection<?>) object).toArray();
 
-    else {
+    } else {
       int lenght = Array.getLength(object);
       array = new Object[lenght];
-      for (int i = 0; i < lenght; i++)
+      for (int i = 0; i < lenght; i++) {
         array[i] = Array.get(object, i);
+      }
     }
     return array;
   }

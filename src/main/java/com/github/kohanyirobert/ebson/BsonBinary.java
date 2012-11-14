@@ -153,9 +153,11 @@ public enum BsonBinary {
    * was found
    */
   public static BsonBinary find(@Nullable Class<?> clazz) {
-    for (BsonBinary binary : values())
-      if (binary.predicate().apply(clazz))
+    for (BsonBinary binary : values()) {
+      if (binary.predicate().apply(clazz)) {
         return binary;
+      }
+    }
     throw new IllegalArgumentException(String.format("no binary "
         + "representing the '%s' type value was found", clazz));
   }
@@ -169,9 +171,11 @@ public enum BsonBinary {
    * was found
    */
   public static BsonBinary find(byte terminal) {
-    for (BsonBinary binary : values())
-      if (binary.terminal() - terminal == 0)
+    for (BsonBinary binary : values()) {
+      if (binary.terminal() - terminal == 0) {
         return binary;
+      }
+    }
     throw new IllegalArgumentException(String.format("no binary representing "
         + "the '%s' terminal value was found", Byte.valueOf(terminal)));
   }

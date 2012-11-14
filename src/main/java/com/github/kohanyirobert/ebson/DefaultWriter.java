@@ -24,8 +24,9 @@ enum DefaultWriter implements BsonWriter {
       int markedPosition = buffer.position();
       buffer.position(markedPosition + Ints.BYTES);
       BsonWriter fieldWriter = BsonToken.FIELD.writer();
-      for (Entry<?, ?> entry : ((Map<?, ?>) reference).entrySet())
+      for (Entry<?, ?> entry : ((Map<?, ?>) reference).entrySet()) {
         fieldWriter.writeTo(buffer, entry);
+      }
       buffer.put(BsonBytes.EOO);
       buffer.putInt(markedPosition, buffer.position() - markedPosition);
     }
@@ -78,8 +79,9 @@ enum DefaultWriter implements BsonWriter {
           ? ((Collection<?>) reference).toArray()
           : reference;
       Map<Object, Object> document = Maps.newLinkedHashMap();
-      for (int i = 0; i < Array.getLength(array); i++)
+      for (int i = 0; i < Array.getLength(array); i++) {
         document.put(String.valueOf(i), Array.get(array, i));
+      }
       BsonToken.DOCUMENT.writer().writeTo(buffer, document);
     }
   },
@@ -149,17 +151,21 @@ enum DefaultWriter implements BsonWriter {
     // @do-not-check-next-line CyclomaticComplexity
     private String flagsToOptions(int flags) {
       SortedSet<Character> options = Sets.newTreeSet();
-      if (hasFlag(flags, Pattern.CASE_INSENSITIVE))
+      if (hasFlag(flags, Pattern.CASE_INSENSITIVE)) {
         options.add(Character.valueOf('i'));
+      }
 
-      if (hasFlag(flags, Pattern.COMMENTS))
+      if (hasFlag(flags, Pattern.COMMENTS)) {
         options.add(Character.valueOf('x'));
+      }
 
-      if (hasFlag(flags, Pattern.DOTALL))
+      if (hasFlag(flags, Pattern.DOTALL)) {
         options.add(Character.valueOf('s'));
+      }
 
-      if (hasFlag(flags, Pattern.MULTILINE))
+      if (hasFlag(flags, Pattern.MULTILINE)) {
         options.add(Character.valueOf('m'));
+      }
 
       return Joiner.on("").join(options);
     }

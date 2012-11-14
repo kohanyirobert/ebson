@@ -19,8 +19,9 @@ public final class DefaultSymbolReaderWriterTest extends AbstractReaderWriterTes
     @Override
     protected ByteBuffer initialValue() {
       StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < BsonRandom.nextInt(MAX_SYMBOL_LENGTH); i++)
+      for (int i = 0; i < BsonRandom.nextInt(MAX_SYMBOL_LENGTH); i++) {
         sb.append(SYMBOL_ALPHABET.charAt(BsonRandom.nextInt(SYMBOL_ALPHABET.length())));
+      }
       ByteBuffer symbol = ByteBuffer.allocate(Ints.BYTES + sb.length() + 1)
           .order(ByteOrder.LITTLE_ENDIAN)
           .putInt(sb.length() + 1)

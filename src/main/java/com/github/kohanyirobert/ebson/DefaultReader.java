@@ -21,12 +21,13 @@ enum DefaultReader implements BsonReader {
       int documentLength = buffer.getInt();
       BsonReader fieldReader = BsonToken.FIELD.reader();
       BsonDocument.Builder document = BsonDocuments.builder();
-      if (documentLength > Ints.BYTES + 1)
+      if (documentLength > Ints.BYTES + 1) {
         do {
           @SuppressWarnings("unchecked")
           Entry<String, Object> entry = (Entry<String, Object>) fieldReader.readFrom(buffer);
           document.put(entry.getKey(), entry.getValue());
         } while (buffer.get(buffer.position()) != BsonBytes.EOO);
+      }
       buffer.get();
       return document.build();
     }
@@ -50,8 +51,9 @@ enum DefaultReader implements BsonReader {
     public Object checkedReadFrom(ByteBuffer buffer) {
       byte[] bytes = new byte[] {};
       byte[] read = new byte[] {BsonBytes.EOF};
-      while ((read[0] = buffer.get()) != BsonBytes.EOO)
+      while ((read[0] = buffer.get()) != BsonBytes.EOO) {
         bytes = Bytes.concat(bytes, read);
+      }
       return new String(bytes, Charsets.UTF_8);
     }
   },
@@ -152,8 +154,9 @@ enum DefaultReader implements BsonReader {
 
     private int optionsToFlags(String options) {
       int flags = 0;
-      for (char option : options.toCharArray())
+      for (char option : options.toCharArray()) {
         flags |= flags + optionToFlag(option);
+      }
       return flags;
     }
 
