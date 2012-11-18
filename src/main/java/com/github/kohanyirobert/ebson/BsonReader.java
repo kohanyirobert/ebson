@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import javax.annotation.Nullable;
 
 /**
- * Reads Java object(s) from {@linkplain ByteBuffer buffers}, deserialized from
+ * Reads Java objects from {@linkplain ByteBuffer buffers}, deserialized from
  * bytes as specified by the <a href="http://bsonspec.org/">BSON</a>
  * specification.
  * <p>

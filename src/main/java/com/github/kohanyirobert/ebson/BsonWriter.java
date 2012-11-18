@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import javax.annotation.Nullable;
 
 /**
- * Writes Java object(s) to {@linkplain ByteBuffer buffers}, serialized to bytes
+ * Writes Java objects to {@linkplain ByteBuffer buffers}, serialized to bytes
  * as specified by the <a href="http://bsonspec.org/">BSON</a> specification.
  * <p>
  * <b>Note:</b> buffers supplied to {@linkplain #writeTo} must use little-endian
