@@ -52,7 +52,7 @@ public final class DefaultBinaryReaderWriterTest extends AbstractReaderWriterTes
     public boolean apply(@Nullable Class<?> input) {
       return input == null
           ? false
-              : User.class.isAssignableFrom(input);
+          : User.class.isAssignableFrom(input);
     }
   }
 
