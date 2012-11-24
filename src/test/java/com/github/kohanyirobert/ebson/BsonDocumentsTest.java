@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 @SuppressWarnings("static-method")
@@ -90,5 +91,24 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
   @Test(expected = IllegalArgumentException.class)
   public void of_multipleKeyValuePairs_withDuplicateKeys() {
     BsonDocuments.of(KEY1, null, KEY1, null, KEY3, null);
+  }
+
+  @Test
+  public void readFrom_singleByteBuffer_withMultipleDocuments() {
+    BsonDocument document1 = BsonDocuments.of(KEY1, null);
+    BsonDocument document2 = BsonDocuments.of(KEY2, null);
+    BsonDocument document3 = BsonDocuments.of(KEY3, null);
+
+    ByteBuffer buffer = BUFFER.get();
+
+    BsonDocuments.writeTo(buffer, document1);
+    BsonDocuments.writeTo(buffer, document3);
+    BsonDocuments.writeTo(buffer, document2);
+
+    buffer.flip();
+
+    assertEquals(BsonDocuments.readFrom(buffer), document1);
+    assertEquals(BsonDocuments.readFrom(buffer), document3);
+    assertEquals(BsonDocuments.readFrom(buffer), document2);
   }
 }
