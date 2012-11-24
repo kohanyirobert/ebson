@@ -20,8 +20,9 @@ final class DefaultDocumentBuilder implements BsonDocument.Builder {
   @Override
   public BsonDocument.Builder putAll(Map<String, Object> map) {
     Preconditions.checkNotNull(map, "null map");
-    for (Entry<String, Object> entry : map.entrySet())
+    for (Entry<String, Object> entry : map.entrySet()) {
       put(entry.getKey(), entry.getValue());
+    }
     return this;
   }
 

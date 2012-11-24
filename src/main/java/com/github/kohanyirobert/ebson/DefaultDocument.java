@@ -39,8 +39,9 @@ final class DefaultDocument extends ForwardingMap<String, Object> implements Bso
   @Override
   public boolean containsKey(Object key) {
     Preconditions.checkNotNull(key, "null key");
-    if (!String.class.isInstance(key))
+    if (!String.class.isInstance(key)) {
       throw new ClassCastException(String.format("key: '%s' is not a string", key));
+    }
     return super.containsKey(key);
   }
 
