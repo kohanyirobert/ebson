@@ -2,12 +2,14 @@ package com.github.kohanyirobert.ebson;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -20,7 +22,7 @@ enum DefaultWriter implements BsonWriter {
   DOCUMENT {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       int markedPosition = buffer.position();
       buffer.position(markedPosition + Ints.BYTES);
       BsonWriter fieldWriter = BsonToken.FIELD.writer();
@@ -35,7 +37,7 @@ enum DefaultWriter implements BsonWriter {
   FIELD {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       Entry<?, ?> entry = (Entry<?, ?>) reference;
       BsonObject bsonObject = BsonObject.find(entry.getValue() == null
           ? null
@@ -49,7 +51,7 @@ enum DefaultWriter implements BsonWriter {
   KEY {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((String) reference).getBytes(Charsets.UTF_8)).put(BsonBytes.EOO);
     }
   },
@@ -57,7 +59,7 @@ enum DefaultWriter implements BsonWriter {
   DOUBLE {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putDouble(((Double) reference).doubleValue());
     }
   },
@@ -65,7 +67,7 @@ enum DefaultWriter implements BsonWriter {
   STRING {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       byte[] bytes = ((String) reference).getBytes(Charsets.UTF_8);
       buffer.putInt(bytes.length + 1).put(bytes).put(BsonBytes.EOO);
     }
@@ -74,7 +76,7 @@ enum DefaultWriter implements BsonWriter {
   ARRAY {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       Object array = reference instanceof Collection
           ? ((Collection<?>) reference).toArray()
           : reference;
@@ -89,7 +91,7 @@ enum DefaultWriter implements BsonWriter {
   BINARY {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       int markedPosition = buffer.position();
       buffer.position(markedPosition + Ints.BYTES);
       BsonBinary bsonBinary = BsonBinary.find(reference.getClass());
@@ -102,7 +104,7 @@ enum DefaultWriter implements BsonWriter {
   GENERIC {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put((byte[]) reference);
     }
   },
@@ -110,7 +112,7 @@ enum DefaultWriter implements BsonWriter {
   OBJECT_ID {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((BsonObjectId) reference).objectId());
     }
   },
@@ -118,7 +120,7 @@ enum DefaultWriter implements BsonWriter {
   BOOLEAN {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((Boolean) reference).booleanValue()
           ? BsonBytes.TRUE
           : BsonBytes.FALSE);
@@ -128,7 +130,7 @@ enum DefaultWriter implements BsonWriter {
   UTC_DATE_TIME {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putLong(((Date) reference).getTime());
     }
   },
@@ -136,13 +138,13 @@ enum DefaultWriter implements BsonWriter {
   NULL {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {}
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {}
   },
 
   REGULAR_EXPRESSION {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       Pattern regularExpression = (Pattern) reference;
       BsonWriter keyWriter = BsonToken.KEY.writer();
       keyWriter.writeTo(buffer, regularExpression.pattern());
@@ -179,7 +181,7 @@ enum DefaultWriter implements BsonWriter {
   SYMBOL {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       ByteBuffer symbol = ((BsonSymbol) reference).symbol();
       buffer.putInt(symbol.capacity() + 1).put(symbol).put(BsonBytes.EOO);
     }
@@ -188,7 +190,7 @@ enum DefaultWriter implements BsonWriter {
   INT32 {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putInt(((Integer) reference).intValue());
     }
   },
@@ -196,7 +198,7 @@ enum DefaultWriter implements BsonWriter {
   TIMESTAMP {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((BsonTimestamp) reference).timestamp());
     }
   },
@@ -204,8 +206,18 @@ enum DefaultWriter implements BsonWriter {
   INT64 {
 
     @Override
-    public void writeTo(ByteBuffer buffer, Object reference) {
+    public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putLong(((Long) reference).longValue());
     }
   };
+
+  @Override
+  public final void writeTo(ByteBuffer buffer, Object reference) {
+    Preconditions.checkNotNull(buffer, "null buffer");
+    Preconditions.checkArgument(buffer.order() == ByteOrder.LITTLE_ENDIAN,
+        "buffer has big-endian byte order; expected little-endian");
+    checkedWriteTo(buffer, reference);
+  }
+
+  abstract void checkedWriteTo(ByteBuffer buffer, Object reference);
 }
