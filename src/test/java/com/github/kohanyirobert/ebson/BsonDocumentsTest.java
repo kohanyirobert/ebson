@@ -101,6 +101,8 @@ public final class BsonDocumentsTest extends AbstractBsonTest {
 
     ByteBuffer buffer = BUFFER.get();
 
+    buffer.clear();
+
     BsonDocuments.writeTo(buffer, document1);
     BsonDocuments.writeTo(buffer, document3);
     BsonDocuments.writeTo(buffer, document2);
