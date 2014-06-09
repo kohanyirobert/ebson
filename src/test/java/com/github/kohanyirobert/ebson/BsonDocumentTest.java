@@ -55,9 +55,4 @@ public final class BsonDocumentTest {
   public void get_keyPresent_withNotStringKey() {
     document1.get(new Object());
   }
-
-  @Test
-  public void equal_twoDocumentsWithSameLogicalValues() {
-    assertEquals(document1, document2);
-  }
 }
