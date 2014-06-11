@@ -83,8 +83,8 @@ public final class DefaultBinaryReaderWriterTest extends AbstractReaderWriterTes
     @Override
     public int getSize(@Nullable Object reference) {
       User user = (User) reference;
-      return BsonObject.STRING.writer().getSize(user.getName()) + 
-             BsonObject.INT32.writer().getSize(Integer.valueOf(user.getAge()));
+      return BsonObject.STRING.writer().getSize(user.getName())
+             + BsonObject.INT32.writer().getSize(Integer.valueOf(user.getAge()));
     }
   }
 

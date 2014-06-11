@@ -196,7 +196,7 @@ public interface BsonDocument extends Map<String, Object> {
    */
   @Override
   void putAll(Map<? extends String, ? extends Object> map);
-
+  
   /**
    * {@linkplain BsonDocument Document} builder.
    * <p>

@@ -5,7 +5,9 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 enum DefaultWriter implements BsonWriter {
-
+  
   DOCUMENT {
 
     @Override
@@ -37,7 +39,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(Object reference) {
-      int constSize = 1 + 5;
+      int constSize = BYTES_BYTES + Ints.BYTES;
       int variableSize = 0;
       BsonWriter fieldWriter = BsonToken.FIELD.writer();
       for (Entry<?, ?> entry : ((Map<?, ?>) reference).entrySet()) {
@@ -67,9 +69,9 @@ enum DefaultWriter implements BsonWriter {
           ? null
           : entry.getValue().getClass());
 
-      int constSize = 1;
-      int variableSize = BsonToken.KEY.writer().getSize(entry.getKey()) +
-                         bsonObject.writer().getSize(entry.getValue());
+      int constSize = BYTES_BYTES;
+      int variableSize = BsonToken.KEY.writer().getSize(entry.getKey())
+                         + bsonObject.writer().getSize(entry.getValue());
       return constSize + variableSize;
     }
   },
@@ -83,7 +85,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      int constSize = 1;
+      int constSize = BYTES_BYTES;
       int variableSize = ((String) reference).getBytes(Charsets.UTF_8).length;
       return constSize + variableSize;
     }
@@ -98,7 +100,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      return 8;
+      return Doubles.BYTES;
     }
   },
 
@@ -112,7 +114,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      int constSize = 5;
+      int constSize = Ints.BYTES + BYTES_BYTES;
       byte[] bytes = ((String) reference).getBytes(Charsets.UTF_8);
       int variableSize = bytes.length;
       return constSize + variableSize;
@@ -161,7 +163,7 @@ enum DefaultWriter implements BsonWriter {
     @Override
     public int getSize(@Nullable Object reference) {
       BsonBinary bsonBinary = BsonBinary.find(reference.getClass());
-      int constSize = 5;
+      int constSize = Ints.BYTES + BYTES_BYTES;
       int variableSize = bsonBinary.writer().getSize(reference);
       return constSize + variableSize;
     }
@@ -204,7 +206,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      return 1;
+      return BOOLEANS_BYTES;
     }
   },
 
@@ -217,7 +219,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      return 8;
+      return Longs.BYTES;
     }
   },
 
@@ -246,8 +248,8 @@ enum DefaultWriter implements BsonWriter {
     public int getSize(@Nullable Object reference) {
       Pattern regularExpression = (Pattern) reference;
       BsonWriter keyWriter = BsonToken.KEY.writer();
-      return keyWriter.getSize(regularExpression.pattern()) + 
-             keyWriter.getSize(flagsToOptions(regularExpression.flags()));
+      return keyWriter.getSize(regularExpression.pattern())
+             + keyWriter.getSize(flagsToOptions(regularExpression.flags()));
     }
 
     // @do-not-check-next-line CyclomaticComplexity
@@ -288,7 +290,7 @@ enum DefaultWriter implements BsonWriter {
     @Override
     public int getSize(@Nullable Object reference) {
       ByteBuffer symbol = ((BsonSymbol) reference).symbol();
-      int constSize = 5;
+      int constSize = Ints.BYTES + BYTES_BYTES;
       int variableSize = symbol.capacity();
       return constSize + variableSize;
     }
@@ -303,7 +305,7 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      return 4;
+      return Ints.BYTES;
     }
   },
 
@@ -329,9 +331,12 @@ enum DefaultWriter implements BsonWriter {
 
     @Override
     public int getSize(@Nullable Object reference) {
-      return 8;
+      return Longs.BYTES;
     }
   };
+  
+  private static final int BOOLEANS_BYTES = 1;
+  private static final int BYTES_BYTES = 1;
 
   @Override
   public final void writeTo(ByteBuffer buffer, Object reference) {

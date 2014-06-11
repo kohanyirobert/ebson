@@ -26,7 +26,8 @@ public interface BsonWriter {
   void writeTo(ByteBuffer buffer, @Nullable Object reference);
   
   /**
-   * Returns the size of the reference object
+   * Returns the size of the reference object.
+   * 
    * @param reference the object to return the size of
    * @return the computed size
    */
