@@ -195,7 +195,7 @@ public enum BsonObject {
   public byte terminal() {
     return terminal;
   }
-
+  
   /**
    * Returns this object's associated {@linkplain Predicate predicate}.
    * 

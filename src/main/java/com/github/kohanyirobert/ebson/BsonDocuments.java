@@ -37,6 +37,17 @@ public final class BsonDocuments {
   public static void writeTo(ByteBuffer buffer, BsonDocument document) {
     BsonToken.DOCUMENT.writer().writeTo(buffer, document);
   }
+  
+  /**
+   * Returns the binary size of the document. This is needed to allocate a
+   * ByteBuffer that is exactly the correct size.
+   * 
+   * @param document the document to obtain the binary size of
+   * @return the documents binary size
+   */
+  public static int binarySize(BsonDocument document){
+    return BsonToken.DOCUMENT.writer().getSize(document);
+  }
 
   /**
    * Returns a new document containing {@code map}'s key-value pairs.
