@@ -24,4 +24,12 @@ public interface BsonWriter {
    * little-endian byte ordering
    */
   void writeTo(ByteBuffer buffer, @Nullable Object reference);
+  
+  /**
+   * Returns the size of the reference object.
+   * 
+   * @param reference the object to return the size of
+   * @return the computed size
+   */
+  int getSize(@Nullable Object reference);
 }

@@ -5,7 +5,9 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -17,8 +19,10 @@ import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
 
-enum DefaultWriter implements BsonWriter {
+import javax.annotation.Nullable;
 
+enum DefaultWriter implements BsonWriter {
+  
   DOCUMENT {
 
     @Override
@@ -31,6 +35,17 @@ enum DefaultWriter implements BsonWriter {
       }
       buffer.put(BsonBytes.EOO);
       buffer.putInt(markedPosition, buffer.position() - markedPosition);
+    }
+
+    @Override
+    public int getSize(Object reference) {
+      int constSize = BYTES_BYTES + Ints.BYTES;
+      int variableSize = 0;
+      BsonWriter fieldWriter = BsonToken.FIELD.writer();
+      for (Entry<?, ?> entry : ((Map<?, ?>) reference).entrySet()) {
+        variableSize += fieldWriter.getSize(entry);
+      }
+      return constSize + variableSize;
     }
   },
 
@@ -46,6 +61,19 @@ enum DefaultWriter implements BsonWriter {
       BsonToken.KEY.writer().writeTo(buffer, entry.getKey());
       bsonObject.writer().writeTo(buffer, entry.getValue());
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      Entry<?, ?> entry = (Entry<?, ?>) reference;
+      BsonObject bsonObject = BsonObject.find(entry.getValue() == null
+          ? null
+          : entry.getValue().getClass());
+
+      int constSize = BYTES_BYTES;
+      int variableSize = BsonToken.KEY.writer().getSize(entry.getKey())
+                         + bsonObject.writer().getSize(entry.getValue());
+      return constSize + variableSize;
+    }
   },
 
   KEY {
@@ -53,6 +81,13 @@ enum DefaultWriter implements BsonWriter {
     @Override
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((String) reference).getBytes(Charsets.UTF_8)).put(BsonBytes.EOO);
+    }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      int constSize = BYTES_BYTES;
+      int variableSize = ((String) reference).getBytes(Charsets.UTF_8).length;
+      return constSize + variableSize;
     }
   },
 
@@ -62,6 +97,11 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putDouble(((Double) reference).doubleValue());
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return Doubles.BYTES;
+    }
   },
 
   STRING {
@@ -70,6 +110,14 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       byte[] bytes = ((String) reference).getBytes(Charsets.UTF_8);
       buffer.putInt(bytes.length + 1).put(bytes).put(BsonBytes.EOO);
+    }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      int constSize = Ints.BYTES + BYTES_BYTES;
+      byte[] bytes = ((String) reference).getBytes(Charsets.UTF_8);
+      int variableSize = bytes.length;
+      return constSize + variableSize;
     }
   },
 
@@ -86,6 +134,18 @@ enum DefaultWriter implements BsonWriter {
       }
       BsonToken.DOCUMENT.writer().writeTo(buffer, document);
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      Object array = reference instanceof Collection
+          ? ((Collection<?>) reference).toArray()
+          : reference;
+      Map<Object, Object> document = Maps.newLinkedHashMap();
+      for (int i = 0; i < Array.getLength(array); i++) {
+        document.put(String.valueOf(i), Array.get(array, i));
+      }
+      return BsonToken.DOCUMENT.writer().getSize(document);
+    }
   },
 
   BINARY {
@@ -99,6 +159,14 @@ enum DefaultWriter implements BsonWriter {
       bsonBinary.writer().writeTo(buffer, reference);
       buffer.putInt(markedPosition, buffer.position() - markedPosition - Ints.BYTES - 1);
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      BsonBinary bsonBinary = BsonBinary.find(reference.getClass());
+      int constSize = Ints.BYTES + BYTES_BYTES;
+      int variableSize = bsonBinary.writer().getSize(reference);
+      return constSize + variableSize;
+    }
   },
 
   GENERIC {
@@ -107,6 +175,11 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put((byte[]) reference);
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return ((byte[]) reference).length;
+    }
   },
 
   OBJECT_ID {
@@ -114,6 +187,11 @@ enum DefaultWriter implements BsonWriter {
     @Override
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((BsonObjectId) reference).objectId());
+    }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return ((BsonObjectId) reference).objectId().capacity();
     }
   },
 
@@ -125,6 +203,11 @@ enum DefaultWriter implements BsonWriter {
           ? BsonBytes.TRUE
           : BsonBytes.FALSE);
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return BOOLEANS_BYTES;
+    }
   },
 
   UTC_DATE_TIME {
@@ -133,12 +216,22 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putLong(((Date) reference).getTime());
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return Longs.BYTES;
+    }
   },
 
   NULL {
 
     @Override
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {}
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return 0;
+    }
   },
 
   REGULAR_EXPRESSION {
@@ -149,6 +242,14 @@ enum DefaultWriter implements BsonWriter {
       BsonWriter keyWriter = BsonToken.KEY.writer();
       keyWriter.writeTo(buffer, regularExpression.pattern());
       keyWriter.writeTo(buffer, flagsToOptions(regularExpression.flags()));
+    }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      Pattern regularExpression = (Pattern) reference;
+      BsonWriter keyWriter = BsonToken.KEY.writer();
+      return keyWriter.getSize(regularExpression.pattern())
+             + keyWriter.getSize(flagsToOptions(regularExpression.flags()));
     }
 
     // @do-not-check-next-line CyclomaticComplexity
@@ -185,6 +286,14 @@ enum DefaultWriter implements BsonWriter {
       ByteBuffer symbol = ((BsonSymbol) reference).symbol();
       buffer.putInt(symbol.capacity() + 1).put(symbol).put(BsonBytes.EOO);
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      ByteBuffer symbol = ((BsonSymbol) reference).symbol();
+      int constSize = Ints.BYTES + BYTES_BYTES;
+      int variableSize = symbol.capacity();
+      return constSize + variableSize;
+    }
   },
 
   INT32 {
@@ -192,6 +301,11 @@ enum DefaultWriter implements BsonWriter {
     @Override
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putInt(((Integer) reference).intValue());
+    }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return Ints.BYTES;
     }
   },
 
@@ -201,6 +315,11 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.put(((BsonTimestamp) reference).timestamp());
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return ((BsonTimestamp) reference).timestamp().capacity();
+    }
   },
 
   INT64 {
@@ -209,7 +328,15 @@ enum DefaultWriter implements BsonWriter {
     public void checkedWriteTo(ByteBuffer buffer, Object reference) {
       buffer.putLong(((Long) reference).longValue());
     }
+
+    @Override
+    public int getSize(@Nullable Object reference) {
+      return Longs.BYTES;
+    }
   };
+  
+  private static final int BOOLEANS_BYTES = 1;
+  private static final int BYTES_BYTES = 1;
 
   @Override
   public final void writeTo(ByteBuffer buffer, Object reference) {
